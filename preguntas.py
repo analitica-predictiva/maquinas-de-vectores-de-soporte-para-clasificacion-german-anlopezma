@@ -221,7 +221,7 @@ def pregunta_03():
     )
 
     # Cree un pipeline que contenga el columnTransformer y el modelo SVC.
-    pipeline = ____(
+    pipeline = Pepeline(
         steps=[
             ("ct", columnTransformer),
             ("svc", SVC()),
