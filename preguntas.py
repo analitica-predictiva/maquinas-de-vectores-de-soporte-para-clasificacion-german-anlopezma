@@ -152,7 +152,7 @@ def pregunta_01():
     En esta función se realiza la carga de datos.
     """
     # Lea el archivo `german.csv` y asignelo al DataFrame `df`
-    df = pd.read_csv("german.csv", sep= ",")
+    df = pd.read_csv("german.csv")
 
     # Asigne la columna `default` a la variable `y`.
     y = df["default"]
@@ -162,7 +162,7 @@ def pregunta_01():
     X = df.copy()
 
     # Remueva la columna `default` del DataFrame `X`.
-    X.drop("default", axis=1, inplace=True)
+    X.pop('default')
 
     # Retorne `X` y `y`
     return X, y
@@ -201,7 +201,7 @@ def pregunta_03():
     # Importe SVC
     # Importe OneHotEncoder
     # Importe Pipeline
-    from sklearn.compose import make_column_transformer
+    from sklearn.compose import ColumnTransformer, make_column_selector, make_column_transformer
     from sklearn.preprocessing import OneHotEncoder
     from sklearn.pipeline import Pipeline
     from sklearn.svm import SVC
@@ -212,18 +212,17 @@ def pregunta_03():
     # Cree un objeto ColumnTransformer que aplique OneHotEncoder a las columnas
     # tipo texto. Use make_column_selector para seleccionar las columnas. Las
     # columnas numéricas no deben ser transformadas.
-    columnTransformer = make_column_transformer(
-        (
-            OneHotEncoder(),
-            make_column_selector(dtype_include=object),
-        ),
-        remainder='passthrough',
+    columnTransformer =ColumnTransformer(
+        transformers=[
+            ("ohe", OneHotEncoder(), make_column_selector(dtype_include=object)),
+        ],
+        remainder="passthrough",
     )
 
     # Cree un pipeline que contenga el columnTransformer y el modelo SVC.
     pipeline = Pepeline(
         steps=[
-            ("ct", columnTransformer),
+            ("Columntransformer", columnTransformer),
             ("svc", SVC()),
         ],
     )
