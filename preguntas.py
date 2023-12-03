@@ -162,7 +162,7 @@ def pregunta_01():
     X = df.copy()
 
     # Remueva la columna `default` del DataFrame `X`.
-    X.pop('default')
+    X.drop('default', axis=1, inplace=True)
 
     # Retorne `X` y `y`
     return X, y
@@ -207,16 +207,17 @@ def pregunta_03():
     from sklearn.svm import SVC
 
     # Cargue las variables.
-    X_train, X_train, y_train, y_test = pregunta_02()
+    X_train, _, y_train, _ = pregunta_02()
 
     # Cree un objeto ColumnTransformer que aplique OneHotEncoder a las columnas
     # tipo texto. Use make_column_selector para seleccionar las columnas. Las
     # columnas numéricas no deben ser transformadas.
-    columnTransformer =ColumnTransformer(
-        transformers=[
-            ("ohe", OneHotEncoder(), make_column_selector(dtype_include=object)),
-        ],
-        remainder="passthrough",
+    columnTransformer = make_column_transformer(
+        (
+            OneHotEncoder(),
+            make_column_selector(dtype_include=object),
+        ),
+        remainder='passthrough',
     )
 
     # Cree un pipeline que contenga el columnTransformer y el modelo SVC.
